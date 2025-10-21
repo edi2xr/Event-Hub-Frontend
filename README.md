@@ -1,1 +1,1 @@
-# Event-Hub-Frontend
+# Event-Hub-Frontend React
