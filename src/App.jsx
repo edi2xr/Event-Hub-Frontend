@@ -2,18 +2,17 @@ import React from "react";
 import "./App.css";
 
 function App() {
-  const handleLogin = (e) => {
-    e.preventDefault();
-    alert("Login button clicked!");
+  const handleUserLogin = (formSubmissionEvent) => {
+    formSubmissionEvent.preventDefault();
+    alert("Welcome back! Login successful! 🎉");
   };
 
-  const handleSignup = () => {
-    alert("Redirecting to Sign Up page...");
+  const redirectToSignup = () => {
+    alert("Let's get you signed up! ✨");
   };
 
   return (
     <div className="login-container">
-      {/* Left Side - Image */}
       <div
         className="login-left"
         style={{
@@ -24,34 +23,43 @@ function App() {
       >
         <div className="overlay">
           <h1 className="logo">Event Hub</h1>
-          <p className="tagline">Connect. Discover. Celebrate.</p>
+          <p className="tagline">Where Amazing Events Come to Life</p>
         </div>
       </div>
 
-      {/* Right Side - Form */}
       <div className="login-right">
         <div className="form-box">
-          <h2>Welcome Back 👋</h2>
-          <p>Login to your account</p>
+          <h2>Hey there! Welcome back 👋</h2>
+          <p>We've missed you! Ready to discover amazing events?</p>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleUserLogin}>
             <div className="input-group">
-              <label>Email</label>
-              <input type="email" placeholder="Enter your email" required />
+              <label>Your Email Address</label>
+              <input 
+                type="email" 
+                placeholder="What's your email? (e.g., sarah@example.com)" 
+                required 
+              />
             </div>
 
             <div className="input-group">
-              <label>Password</label>
-              <input type="password" placeholder="Enter your password" required />
+              <label>Your Password</label>
+              <input 
+                type="password" 
+                placeholder="Enter your super secret password" 
+                required 
+              />
             </div>
 
-            <button type="submit" className="btn login-btn">Login</button>
+            <button type="submit" className="btn login-btn">
+              Let's Go! 🚀
+            </button>
           </form>
 
           <p className="signup-text">
-            Don’t have an account?{" "}
-            <button onClick={handleSignup} className="btn signup-btn">
-              Sign Up
+            First time here?{" "}
+            <button onClick={redirectToSignup} className="btn signup-btn">
+              Join Our Community
             </button>
           </p>
         </div>
