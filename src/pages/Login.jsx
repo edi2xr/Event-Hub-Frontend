@@ -17,16 +17,15 @@ export default function Login() {
     setLoginMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userCredentials),
+        credentials:"include"
       });
+      const data = await response.json();
 
-      if (!response.ok) throw new Error("Hmm, those credentials don't look right");
-
-      const userData = await response.json();
-      localStorage.setItem("userToken", userData.token);
+      if (!response.ok) throw new Error(data.error||"Hmm, those credentials don't look right");
       navigate("/events");
     } catch (loginError) {
       setLoginMessage(loginError.message);
