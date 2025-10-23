@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../assets/api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,21 +18,14 @@ export default function Login() {
     setLoginMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userCredentials),
-        credentials:"include"
-      });
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.error||"Hmm, those credentials don't look right");
+      await loginUser(userCredentials); 
       navigate("/events");
-    } catch (loginError) {
-      setLoginMessage(loginError.message);
+    } catch (error) {
+      setLoginMessage(error.message);
     } finally {
       setIsLoggingIn(false);
     }
+
   };
 
   return (
