@@ -1,0 +1,21 @@
+const URL = "http://localhost:5000/auth";
+
+export async function getAllUsers() {
+  const res = await fetch(`${URL}/users`, {
+    method: "GET",
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Failed to load users");
+  return data.users;
+}
+
+export async function toggleUserStatus(userId) {
+  const res = await fetch(`${URL}/users/${userId}/toggle-status`, {
+    method: "PATCH",
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Failed to update user status");
+  return data.user;
+}

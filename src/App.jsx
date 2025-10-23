@@ -1,70 +1,76 @@
-import React from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { fetchUserProfile } from "./api/auth";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/AdminDashboard";
+import LeaderDashboard from "./pages/LeaderDashboard";
+import UserDashboard from "./pages/UserDashboard";
 
 function App() {
-  const handleUserLogin = (formSubmissionEvent) => {
-    formSubmissionEvent.preventDefault();
-    alert("Welcome back! Login successful! 🎉");
-  };
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const redirectToSignup = () => {
-    alert("Let's get you signed up! ✨");
-  };
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await fetchUserProfile();
+        setUser(userData);
+      } catch (err) {
+        console.warn("No active session:", err.message);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUser();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="login-container">
-      <div
-        className="login-left"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=600&fit=crop)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        <div className="overlay">
-          <h1 className="logo">Event Hub</h1>
-          <p className="tagline">Where Amazing Events Come to Life</p>
-        </div>
-      </div>
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <Navigate to="/admin" />
+              ) : user.role === "leader" ? (
+                <Navigate to="/leader" />
+              ) : (
+                <Navigate to="/user" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
-      <div className="login-right">
-        <div className="form-box">
-          <h2>Hey there! Welcome back 👋</h2>
-          <p>We've missed you! Ready to discover amazing events?</p>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-          <form onSubmit={handleUserLogin}>
-            <div className="input-group">
-              <label>Your Email Address</label>
-              <input 
-                type="email" 
-                placeholder="What's your email? (e.g., sarah@example.com)" 
-                required 
-              />
-            </div>
+        {/* Role-based Dashboards */}
+        <Route
+          path="/admin"
+          element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/leader"
+          element={user?.role === "leader" ? <LeaderDashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/user"
+          element={user?.role === "user" ? <UserDashboard /> : <Navigate to="/" />}
+        />
 
-            <div className="input-group">
-              <label>Your Password</label>
-              <input 
-                type="password" 
-                placeholder="Enter your super secret password" 
-                required 
-              />
-            </div>
-
-            <button type="submit" className="btn login-btn">
-              Let's Go! 🚀
-            </button>
-          </form>
-
-          <p className="signup-text">
-            First time here?{" "}
-            <button onClick={redirectToSignup} className="btn signup-btn">
-              Join Our Community
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+        {/* Fallback */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 

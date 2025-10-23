@@ -13,7 +13,7 @@ export async function loginUser(credentials) {
   if (!response.ok) throw new Error(data.error || "Login failed");
   return data;
 }
-
+// to keep a user logged in aki refresh page
 export async function fetchUserProfile() {
   const response = await fetch(`${URL}/profile`, {
     method: "GET",
@@ -24,7 +24,7 @@ export async function fetchUserProfile() {
   if (!response.ok) throw new Error(data.error || "Could not load profile");
   return data.user;
 }
-
+// to refresh expired tokens to prevent a user from loggin in when they expire
 export async function refreshToken() {
   const response = await fetch(`${URL}/refresh`, {
     method: "POST",
