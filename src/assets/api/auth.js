@@ -1,5 +1,5 @@
+const URL = "http://127.0.0.1:5000/api/auth";
 
-const URL = "http://localhost:5000/auth";
 
 export async function loginUser(credentials) {
   const response = await fetch(`${URL}/login`, {
@@ -20,10 +20,16 @@ export async function fetchUserProfile() {
     credentials: "include",
   });
 
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || "Could not load profile");
-  return data.user;
+  const text = await response.text(); // get raw response
+  try {
+    const data = JSON.parse(text);
+    if (!response.ok) throw new Error(data.error || "Could not load profile");
+    return data.user;
+  } catch {
+    throw new Error("Invalid server response. Are you logged in?");
+  }
 }
+
 // to refresh expired tokens to prevent a user from loggin in when they expire
 export async function refreshToken() {
   const response = await fetch(`${URL}/refresh`, {

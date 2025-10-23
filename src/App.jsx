@@ -1,12 +1,14 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { fetchUserProfile } from "./api/auth";
+import { fetchUserProfile } from "./assets/api/auth";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import NotFound from "./pages/NotFound";
-import AdminDashboard from "./pages/AdminDashboard";
-import LeaderDashboard from "./pages/LeaderDashboard";
-import UserDashboard from "./pages/UserDashboard";
+import NotFound from "./pages/Error";
+import AdminDashboard from "./pages/Admin";
+import LeaderDashboard from "./pages/Leader";
+import UserDashboard from "./pages/User";
+
 
 function App() {
   const [user, setUser] = useState(null);

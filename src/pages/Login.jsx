@@ -1,6 +1,8 @@
+import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../assets/api/auth";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -60,6 +62,17 @@ export default function Login() {
 
           <form onSubmit={attemptLogin} className="space-y-4">
             <div>
+              <label className="block text-sm font-semibold mb-1">Username</label>
+              <input
+                name="Username"
+                placeholder="What's your username?"
+                value={userCredentials.name}
+                onChange={updateCredentials}
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              />
+            </div>
+            <div>
               <label className="block text-sm font-semibold mb-1">Your Email</label>
               <input
                 type="email"
@@ -97,7 +110,7 @@ export default function Login() {
           <p className="text-sm text-center mt-4">
             New around here?{" "}
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/signup")}
               className="text-blue-600 hover:underline"
             >
               Join the fun!

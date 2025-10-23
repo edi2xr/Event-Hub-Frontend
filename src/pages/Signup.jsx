@@ -1,6 +1,8 @@
+import React from "react";
 import { useState } from "react";
-import { loginUser, fetchUserProfile } from "../api/auth";
+import { loginUser, fetchUserProfile } from "../assets/api/auth";
 import { useNavigate } from "react-router-dom";
+
 
 export default function Signup() {
   const [mode, setMode] = useState("choose");
@@ -19,7 +21,7 @@ export default function Signup() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/auth/register", {
+      const res = await fetch("http://127.0.0.1:5000/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, role }),
@@ -145,6 +147,31 @@ export default function Signup() {
               required
               className="w-full border p-2 rounded mb-3"
             />
+
+            {/* Extra field for Leader */}
+            {role === "leader" && (
+              <input
+                name="club_name"
+                placeholder="Club Name"
+                value={formData.club_name || ""}
+                onChange={handleChange}
+                required
+                className="w-full border p-2 rounded mb-3"
+              />
+            )}
+
+            {/* Extra field for User */}
+            {role === "user" && (
+              <input
+                name="club_access_code"
+                placeholder="Club Access Code"
+                value={formData.club_access_code || ""}
+                onChange={handleChange}
+                required
+                className="w-full border p-2 rounded mb-3"
+              />
+            )}
+
             <button
               type="submit"
               disabled={loading}
@@ -152,6 +179,7 @@ export default function Signup() {
             >
               {loading ? "Signing up..." : "Sign Up"}
             </button>
+
             <p className="mt-4 text-center">
               Already have an account?{" "}
               <span
@@ -164,6 +192,7 @@ export default function Signup() {
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
           </form>
         )}
+
 
         {mode === "login" && (
           <form
