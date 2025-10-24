@@ -6,7 +6,7 @@ import { loginUser } from "../assets/api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [userCredentials, setUserCredentials] = useState({ email: "", password: "" });
+  const [userCredentials, setUserCredentials] = useState({ email: "", password: "",username:"" });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginMessage, setLoginMessage] = useState("");
 
@@ -64,7 +64,7 @@ export default function Login() {
             <div>
               <label className="block text-sm font-semibold mb-1">Username</label>
               <input
-                name="Username"
+                name="username"
                 placeholder="What's your username?"
                 value={userCredentials.name}
                 onChange={updateCredentials}
