@@ -1,117 +1,133 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../assets/api/auth";
-
+import { useAuth } from "../context/AuthContext";
+import { LogIn, User, Lock, Sparkles } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [userCredentials, setUserCredentials] = useState({ email: "", password: "" });
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [loginMessage, setLoginMessage] = useState("");
+  const { login } = useAuth();
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const updateCredentials = (inputEvent) => {
-    setUserCredentials({ ...userCredentials, [inputEvent.target.name]: inputEvent.target.value });
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const attemptLogin = async (formEvent) => {
-    formEvent.preventDefault();
-    setIsLoggingIn(true);
-    setLoginMessage("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
-      await loginUser(userCredentials); 
-      navigate("/events");
-    } catch (error) {
-      setLoginMessage(error.message);
+      await login(credentials);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
     } finally {
-      setIsLoggingIn(false);
+      setIsLoading(false);
     }
-
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="hidden md:flex w-1/2 text-white items-center justify-center p-10 relative overflow-hidden" 
-           style={{ 
-             backgroundImage: 'url(https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=600&fit=crop)', 
-             backgroundSize: 'cover', 
-             backgroundPosition: 'center' 
-           }}>
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+    <div className="page-container flex min-h-screen">
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
+      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-primary-600 via-secondary-600 to-accent-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent-400 rounded-full blur-3xl"></div>
+        </div>
         
-        <div className="max-w-md text-center relative z-10">
-          <h1 className="text-5xl font-bold mb-4">EventHub ✨</h1>
-          <p className="text-xl">
+        <div className="relative z-10 flex flex-col items-center justify-center w-full px-10 text-center">
+          <Sparkles className="w-20 h-20 text-white mb-6 animate-pulse" />
+          <h1 className="text-6xl font-display font-bold text-white mb-4">EventHub</h1>
+          <p className="text-2xl text-white/90 font-medium mb-2">Welcome Back!</p>
+          <p className="text-lg text-white/80 max-w-md">
             Where memories are made and friendships bloom
           </p>
         </div>
       </div>
 
       <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-8">
-        <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
-          <h2 className="text-3xl font-bold text-center mb-6 text-blue-600">
-            Welcome Home! 🏠
-          </h2>
+        <div className="w-full max-w-md card p-8 animate-fade-in">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-display font-bold gradient-text mb-2">
+              Welcome Home!
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">Login to continue</p>
+          </div>
 
-          {loginMessage && (
-            <p className="bg-red-100 text-red-600 text-sm p-2 mb-4 rounded">
-              {loginMessage}
-            </p>
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-4 flex items-center gap-2 animate-slide-down">
+              <span className="font-medium">{error}</span>
+            </div>
           )}
 
-          <form onSubmit={attemptLogin} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold mb-1">Username</label>
-              <input
-                name="Username"
-                placeholder="What's your username?"
-                value={userCredentials.name}
-                onChange={updateCredentials}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold mb-1">Your Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="What's your email address?"
-                value={userCredentials.email}
-                onChange={updateCredentials}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Username
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  name="username"
+                  value={credentials.username}
+                  onChange={handleChange}
+                  placeholder="Enter your username"
+                  className="input-field pl-10"
+                  required
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-1">Your Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your secret password"
-                value={userCredentials.password}
-                onChange={updateCredentials}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="password"
+                  name="password"
+                  value={credentials.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className="input-field pl-10"
+                  required
+                />
+              </div>
             </div>
 
             <button
               type="submit"
-              disabled={isLoggingIn}
-              className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50"
+              disabled={isLoading}
+              className="btn-primary w-full py-3 text-base flex items-center justify-center gap-2"
             >
-              {isLoggingIn ? "Getting you in..." : "Let's Go! 🚀"}
+              {isLoading ? (
+                <>
+                  <div className="loading-spinner w-5 h-5"></div>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-5 h-5" />
+                  <span>Let's Go!</span>
+                </>
+              )}
             </button>
           </form>
 
-          <p className="text-sm text-center mt-4">
+          <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
             New around here?{" "}
             <button
               onClick={() => navigate("/signup")}
-              className="text-blue-600 hover:underline"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold hover:underline"
             >
               Join the fun!
             </button>
