@@ -11,6 +11,7 @@ import NotFound from "./pages/Error";
 import AdminDashboard from "./pages/Admin";
 import LeaderDashboard from "./pages/Leader";
 import UserDashboard from "./pages/User";
+import Welcome from "./pages/Welcome";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -40,10 +41,12 @@ function AppRoutes() {
               <Navigate to="/user" />
             )
           ) : (
-            <Navigate to="/login" />
+            <Navigate to="/welcome" />
           )
         }
       />
+
+      <Route path="/welcome" element={<Welcome />} />
 
       <Route
         path="/login"

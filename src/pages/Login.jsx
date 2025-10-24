@@ -6,16 +6,10 @@ import ThemeToggle from "../components/ThemeToggle";
 
 export default function Login() {
   const navigate = useNavigate();
-<<<<<<< HEAD
   const { login } = useAuth();
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-=======
-  const [userCredentials, setUserCredentials] = useState({ email: "", password: "",username:"" });
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [loginMessage, setLoginMessage] = useState("");
->>>>>>> b3742f8b69d7d41b1826749c7ab0d38c4cdb11e4
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -76,7 +70,6 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-<<<<<<< HEAD
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Username
               </label>
@@ -91,29 +84,6 @@ export default function Login() {
                   required
                 />
               </div>
-=======
-              <label className="block text-sm font-semibold mb-1">Username</label>
-              <input
-                name="username"
-                placeholder="What's your username?"
-                value={userCredentials.name}
-                onChange={updateCredentials}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold mb-1">Your Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="What's your email address?"
-                value={userCredentials.email}
-                onChange={updateCredentials}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
->>>>>>> b3742f8b69d7d41b1826749c7ab0d38c4cdb11e4
             </div>
 
             <div>
