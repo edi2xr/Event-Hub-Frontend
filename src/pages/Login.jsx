@@ -36,7 +36,6 @@ const handleGoogleLogin = async () => {
     setError("");
     
     try {
-      
       const result = await signInWithGoogle();
       const idToken = await result.user.getIdToken();
       const response = await login({ idToken });

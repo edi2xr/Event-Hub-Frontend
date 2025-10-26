@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || " https://cationic-nonhabitually-joella.ngrok-free.dev";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://f742e55ac8b6.ngrok-free.app";
 
 export const API_ENDPOINTS = {
   auth: {
@@ -31,6 +31,7 @@ export const apiRequest = async (url, options = {}) => {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
       ...options.headers,
     },
   };
