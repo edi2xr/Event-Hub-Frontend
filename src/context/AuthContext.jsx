@@ -26,14 +26,26 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setError(null);
-      const response = await authService.login(credentials);
-      if (response.user) {
-        setUser(response.user);
-        return response.user;
+      if (credentials.idToken) {
+        const response = await authService.googleAuth(credentials.idToken);
+        if (response.user) {
+          setUser(response.user);
+          return response.user;
+        }
+        const userData = await authService.getProfile();
+        setUser(userData);
+        return userData;
+      } else {
+        
+        const response = await authService.login(credentials);
+        if (response.user) {
+          setUser(response.user);
+          return response.user;
+        }
+        const userData = await authService.getProfile();
+        setUser(userData);
+        return userData;
       }
-      const userData = await authService.getProfile();
-      setUser(userData);
-      return userData;
     } catch (err) {
       setError(err.message);
       throw err;

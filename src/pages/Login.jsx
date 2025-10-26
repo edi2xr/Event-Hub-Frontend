@@ -32,15 +32,20 @@ export default function Login() {
   };
 
 const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    
     try {
+      
       const result = await signInWithGoogle();
-      const user = result.user;
-      console.log("Google User:", user);
-      alert(`Welcome ${user.displayName}!`);
+      const idToken = await result.user.getIdToken();
+      const response = await login({ idToken });
       navigate("/dashboard");
     } catch (error) {
-      console.error(error);
+      console.error("Google login error:", error);
       setError("Google sign-in failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,14 +148,24 @@ const handleGoogleLogin = async () => {
             <p className="text-gray-500 dark:text-gray-400 mb-2">or</p>
             <button
               onClick={handleGoogleLogin}
-              className="w-full py-3 flex items-center justify-center gap-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+              disabled={isLoading}
+              className="w-full py-3 flex items-center justify-center gap-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                alt="Google logo"
-                className="w-5 h-5"
-              />
-              <span className="font-medium">Continue with Google</span>
+              {isLoading ? (
+                <>
+                  <div className="loading-spinner w-5 h-5"></div>
+                  <span className="font-medium">Signing in...</span>
+                </>
+              ) : (
+                <>
+                  <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                    alt="Google logo"
+                    className="w-5 h-5"
+                  />
+                  <span className="font-medium">Continue with Google</span>
+                </>
+              )}
             </button>
           </div>
 

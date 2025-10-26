@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
     clubMembers: `${API_BASE_URL}/api/auth/club-members`,
     users: `${API_BASE_URL}/api/auth/users`,
     toggleStatus: (userId) => `${API_BASE_URL}/api/auth/users/${userId}/toggle-status`,
+    googleAuth: `${API_BASE_URL}/api/auth/google-auth`,
   },
   events: {
     base: `${API_BASE_URL}/api/events`,

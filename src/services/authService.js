@@ -73,5 +73,12 @@ export const authService = {
     });
     return data.user;
   },
+
+  async googleAuth(idToken) {
+    return apiRequest(API_ENDPOINTS.auth.googleAuth, {
+      method: "POST",
+      body: JSON.stringify({ id_token: idToken }),
+    });
+  },
 };
 
