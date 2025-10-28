@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://f742e55ac8b6.ngrok-free.app";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://cationic-nonhabitually-joella.ngrok-free.dev";
 
 export const API_ENDPOINTS = {
   auth: {
