@@ -7,7 +7,7 @@ export default function Welcome() {
   return (
     <div className="min-h-screen flex flex-col text-white relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-sky-800 to-emerald-600 opacity-95"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-secondary-800 to-accent-600 opacity-95"></div>
 
         <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -31,7 +31,7 @@ export default function Welcome() {
       {/* Navbar */}
       <nav className="flex justify-between items-center p-6 bg-black/20 backdrop-blur-md z-10">
         <h1 className="text-3xl font-extrabold tracking-wide select-none">
-          Event<span className="text-amber-300">Hub</span>
+          Event<span className="text-accent-300">Hub</span>
         </h1>
         <div className="flex gap-4">
           <button
@@ -42,7 +42,7 @@ export default function Welcome() {
           </button>
           <button
             onClick={() => navigate("/signup")}
-            className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black rounded-lg font-semibold transition"
+            className="px-4 py-2 bg-accent-400 hover:bg-accent-300 text-black rounded-lg font-semibold transition"
           >
             Sign Up
           </button>
@@ -63,7 +63,7 @@ export default function Welcome() {
           </p>
           <button
             onClick={() => navigate("/signup")}
-            className="px-8 py-3 bg-amber-400 hover:bg-amber-300 rounded-full text-lg font-semibold transition shadow-md"
+            className="px-8 py-3 bg-accent-400 hover:bg-accent-300 rounded-full text-lg font-semibold transition shadow-md"
           >
             Get Started 🚀
           </button>
@@ -89,7 +89,7 @@ export default function Welcome() {
           It demonstrates teamwork, real-world integration with M-Pesa, and
           strong full-stack design.
         </p>
-        <h4 className="mt-4 text-xl font-bold text-amber-300">JOIN US TODAY!</h4>
+        <h4 className="mt-4 text-xl font-bold text-accent-300">JOIN US TODAY!</h4>
       </footer>
     </div>
   );
