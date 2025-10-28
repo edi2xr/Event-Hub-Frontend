@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useAdmin } from "../context/AdminContext";
 import { useEvents } from "../context/EventContext";
-import { Calendar, Users, LogOut, CheckCircle, XCircle, Shield } from "lucide-react";
+import { Calendar, Users, LogOut, CheckCircle, XCircle, Shield, Home } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
 
 export default function AdminDashboard() {
@@ -64,6 +64,13 @@ export default function AdminDashboard() {
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/welcome")}
+                className="btn-secondary flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </button>
               <ThemeToggle />
               <button
                 onClick={handleLogout}
