@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/Admin";
 import LeaderDashboard from "./pages/Leader";
 import UserDashboard from "./pages/User";
 import Welcome from "./pages/Welcome";
+import EventHub from "./components/EventHub";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -94,6 +95,18 @@ function AppRoutes() {
             </EventProvider>
           ) : (
             <Navigate to="/" />
+          )
+        }
+      />
+      <Route
+        path="/eventhub"
+        element={
+          user ? (
+            <EventProvider>
+              <EventHub />
+            </EventProvider>
+          ) : (
+            <Navigate to="/login" />
           )
         }
       />

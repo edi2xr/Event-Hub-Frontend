@@ -52,6 +52,12 @@ export default function UserDashboard() {
       </h1>
             <div className="flex items-center gap-3">
               <button
+                onClick={() => navigate("/eventhub")}
+                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-2"
+              >
+                🎪 Event Hub
+              </button>
+              <button
                 onClick={() => navigate("/welcome")}
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
               >
