@@ -1,4 +1,4 @@
-const URL = "http://172.30.39.117:5000/api/auth";
+const URL = "http://192.168.0.112:5000/api/auth";
 
 
 export async function activateSubscription() {
