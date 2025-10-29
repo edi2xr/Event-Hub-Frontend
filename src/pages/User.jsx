@@ -28,14 +28,26 @@ export default function UserDashboard() {
       return;
     }
     try {
-      await purchaseTicket(selectedEvent.id, phoneNumber);
-      alert("Ticket purchase initiated! Check your phone for M-Pesa prompt.");
-      setSelectedEvent(null);
-      setPhoneNumber("");
-      } catch (err) {
-      alert(err.message);
+      const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone_number: phoneNumber,
+          amount: selectedEvent.ticket_price * 1.05
+        })
+      })
+      const result = await response.json()
+      if (response.ok) {
+        alert("Ticket purchase initiated! Check your phone for M-Pesa prompt.");
+        setSelectedEvent(null);
+        setPhoneNumber("");
+      } else {
+        alert(`Payment failed: ${result.error}`);
       }
-    };
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   const handleLogout = async () => {
     await logout();

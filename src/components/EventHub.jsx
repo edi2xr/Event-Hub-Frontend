@@ -13,8 +13,20 @@ function EventHub() {
     const phone = prompt('Enter your phone number (254XXXXXXXXX):')
     if (phone) {
       try {
-        await purchaseTicket(event.id, phone)
-        alert(`M-Pesa payment request sent to ${phone}!\nCheck your phone for the payment prompt.`)
+        const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone_number: phone,
+            amount: (event.price || event.ticket_price) * 1.05
+          })
+        })
+        const result = await response.json()
+        if (response.ok) {
+          alert(`M-Pesa payment request sent to ${phone}!\nCheck your phone for the payment prompt.`)
+        } else {
+          alert(`Payment failed: ${result.error}`)
+        }
       } catch (error) {
         alert('Payment failed. Please try again.')
       }
