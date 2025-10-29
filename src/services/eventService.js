@@ -12,6 +12,7 @@ export const eventService = {
     const params = new URLSearchParams({ page, per_page: perPage });
     if (status) params.append("status", status);
 
+    // Always use authenticated endpoint for admin/leader access
     return apiRequest(`${API_ENDPOINTS.events.all}?${params}`, {
       method: "GET",
     });

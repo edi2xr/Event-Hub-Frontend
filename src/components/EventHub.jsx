@@ -2,17 +2,27 @@ import React, { useState, useEffect } from 'react'
 import { useEvents } from '../context/EventContext'
 
 function EventHub() {
-  const { events, loadEvents, purchaseTicket } = useEvents()
+  const { purchaseTicket } = useEvents()
   const [subscription, setSubscription] = useState(null)
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
-    loadEvents()
+    // Load public events directly
+    fetch('http://localhost:8000/api/events/public')
+      .then(res => res.json())
+      .then(data => {
+        console.log('Public events loaded:', data)
+        setEvents(data.events || [])
+      })
+      .catch(err => console.error('Failed to load events:', err))
   }, [])
 
   const handleBuyTickets = async (event) => {
     const phone = prompt('Enter your phone number (254XXXXXXXXX):')
+    console.log('Phone entered:', phone)
     if (phone) {
       try {
+        console.log('Making M-Pesa request...')
         const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -22,13 +32,15 @@ function EventHub() {
           })
         })
         const result = await response.json()
+        console.log('M-Pesa response:', result)
         if (response.ok) {
-          alert(`M-Pesa payment request sent to ${phone}!\nCheck your phone for the payment prompt.`)
+          alert(`M-Pesa payment request sent to ${phone}!\nCheck your phone for the payment prompt.\nCheckout ID: ${result.checkout_request_id}`)
         } else {
           alert(`Payment failed: ${result.error}`)
         }
       } catch (error) {
-        alert('Payment failed. Please try again.')
+        console.error('M-Pesa error:', error)
+        alert(`Payment failed: ${error.message}`)
       }
     }
   }
@@ -50,12 +62,28 @@ function EventHub() {
 
   const handleSubscription = async () => {
     const phone = prompt('Enter your phone number for 200 KES subscription:')
+    console.log('Subscription phone entered:', phone)
     if (phone) {
       try {
-        // Call subscription API
-        alert(`Subscription payment request sent to ${phone}!\nCheck your phone for the payment prompt.`)
+        console.log('Making subscription M-Pesa request...')
+        const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone_number: phone,
+            amount: 200
+          })
+        })
+        const result = await response.json()
+        console.log('Subscription M-Pesa response:', result)
+        if (response.ok) {
+          alert(`Subscription payment request sent to ${phone}!\nCheck your phone for the payment prompt.\nCheckout ID: ${result.checkout_request_id}`)
+        } else {
+          alert(`Subscription failed: ${result.error}`)
+        }
       } catch (error) {
-        alert('Subscription failed. Please try again.')
+        console.error('Subscription error:', error)
+        alert(`Subscription failed: ${error.message}`)
       }
     }
   }

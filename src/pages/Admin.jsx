@@ -17,7 +17,7 @@ export default function AdminDashboard() {
     if (activeTab === "users") {
       loadUsers();
     } else {
-      loadEvents();
+      loadEvents(1, 10, 'pending'); // Load pending events for admin approval
     }
   }, [activeTab]);
 
@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const handleApproveEvent = async (eventId) => {
     try {
       await approveEvent(eventId);
+      loadEvents(1, 10, 'pending'); // Reload pending events
     } catch (err) {
       alert(err.message);
     }
@@ -45,6 +46,7 @@ export default function AdminDashboard() {
   const handleRejectEvent = async (eventId) => {
     try {
       await rejectEvent(eventId);
+      loadEvents(1, 10, 'pending'); // Reload pending events
     } catch (err) {
       alert(err.message);
     }
