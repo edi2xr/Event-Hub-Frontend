@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import { useLeader } from "../context/LeaderContext";
 import { useEvents } from "../context/EventContext";
 import { Home } from "lucide-react";
+import concertImage from "../assets/concerts.jpeg";
+
 
 export default function LeaderDashboard() {
   const navigate = useNavigate();
@@ -180,9 +182,9 @@ export default function LeaderDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => (
               <div key={event.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="h-48 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-6xl">
-                  🎉
-                </div>
+               <div className="h-48 w-full overflow-hidden rounded-t-xl">
+                  <img src={concertImage} alt="Event Banner" className="w-full h-full object-cover"/>
+               </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-xl font-bold text-gray-800">{event.title}</h3>
