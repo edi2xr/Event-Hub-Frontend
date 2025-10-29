@@ -36,13 +36,13 @@ export default function Welcome() {
         <div className="flex gap-4">
           <button
             onClick={() => navigate("/login")}
-            className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-semibold transition"
+            className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-semibold transition transform hover:-translate-y-1 hover:scale-105"
           >
             Login
           </button>
           <button
             onClick={() => navigate("/signup")}
-            className="px-4 py-2 bg-accent-400 hover:bg-accent-300 text-black rounded-lg font-semibold transition"
+            className="px-4 py-2 bg-accent-400 hover:bg-accent-300 text-black rounded-lg font-semibold transition transform hover:-translate-y-1 hover:scale-105"
           >
             Sign Up
           </button>
@@ -63,7 +63,7 @@ export default function Welcome() {
           </p>
           <button
             onClick={() => navigate("/signup")}
-            className="px-8 py-3 bg-accent-400 hover:bg-accent-300 rounded-full text-lg font-semibold transition shadow-md"
+            className="px-8 py-3 bg-accent-400 hover:bg-accent-300 rounded-full text-lg font-semibold transition transform hover:-translate-y-1 hover:scale-105 shadow-md"
           >
             Get Started 🚀
           </button>
