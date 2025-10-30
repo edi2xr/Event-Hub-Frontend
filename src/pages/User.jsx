@@ -30,7 +30,7 @@ export default function UserDashboard() {
 
   const loadClubSubscriptions = async () => {
     try {
-      const response = await fetch('https://event-hub-backend-2.onrender.com/api/user/subscriptions', {
+      const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/user/subscriptions', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await response.json();
@@ -49,7 +49,7 @@ export default function UserDashboard() {
       return;
     }
     try {
-      const response = await fetch('https://event-hub-backend-2.onrender.com/api/payments/test-mpesa', {
+      const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/test-mpesa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -96,7 +96,7 @@ export default function UserDashboard() {
     }
     try {
       // First initiate M-Pesa payment with 10% commission
-      const response = await fetch('https://event-hub-backend-2.onrender.com/api/payments/club-subscription', {
+      const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/club-subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

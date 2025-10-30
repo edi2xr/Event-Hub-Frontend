@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://event-hub-backend-2.onrender.com";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://cationic-nonhabitually-joella.ngrok-free.dev";
 
 export const API_ENDPOINTS = {
   auth: {

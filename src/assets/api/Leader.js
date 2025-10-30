@@ -1,4 +1,4 @@
-const URL = "https://event-hub-backend-2.onrender.com/api/auth";
+const URL = "https://cationic-nonhabitually-joella.ngrok-free.dev/api/auth";
 
 
 export async function activateSubscription() {
