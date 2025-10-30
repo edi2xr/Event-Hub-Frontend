@@ -1,133 +1,112 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeContext";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { EventProvider } from "./context/EventContext";
-import { AdminProvider } from "./context/AdminContext";
-import { LeaderProvider } from "./context/LeaderContext";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import NotFound from "./pages/Error";
-import AdminDashboard from "./pages/Admin";
-import LeaderDashboard from "./pages/Leader";
-import UserDashboard from "./pages/User";
-import Welcome from "./pages/Welcome";
-import EventHub from "./components/EventHub";
-import TestMpesa from "./pages/TestMpesa";
-
-function AppRoutes() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600"></div>
-          <p className="mt-4 text-lg text-gray-600 font-semibold">Loading EventHub...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/admin" />
-            ) : user.role === "leader" ? (
-              <Navigate to="/leader" />
-            ) : (
-              <Navigate to="/user" />
-            )
-          ) : (
-            <Navigate to="/welcome" />
-          )
-        }
-      />
-
-      <Route path="/welcome" element={<Welcome />} />
-
-      <Route
-        path="/login"
-        element={user ? <Navigate to="/" /> : <Login />}
-      />
-      <Route
-        path="/signup"
-        element={user ? <Navigate to="/" /> : <Signup />}
-      />
-
-      <Route
-        path="/admin"
-        element={
-          user?.role === "admin" ? (
-            <AdminProvider>
-              <EventProvider>
-                <AdminDashboard />
-              </EventProvider>
-            </AdminProvider>
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
-      <Route
-        path="/leader"
-        element={
-          user?.role === "leader" ? (
-            <LeaderProvider>
-              <EventProvider>
-                <LeaderDashboard />
-              </EventProvider>
-            </LeaderProvider>
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
-      <Route
-        path="/user"
-        element={
-          user?.role === "user" ? (
-            <EventProvider>
-              <UserDashboard />
-            </EventProvider>
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
-      <Route
-        path="/eventhub"
-        element={
-          user ? (
-            <EventProvider>
-              <EventHub />
-            </EventProvider>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route path="/test-mpesa" element={<TestMpesa />} />
-
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-}
+import { useState } from 'react'
+import './App.css'
 
 function App() {
+  const [events, setEvents] = useState([
+    {
+      id: 1,
+      title: 'Design Conference',
+      date: 'Mar 15, 2024',
+      time: '10:00 AM',
+      location: 'San Francisco',
+      price: '$299',
+      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400',
+      category: 'Design'
+    },
+    {
+      id: 2,
+      title: 'Tech Summit 2024',
+      date: 'Apr 20, 2024',
+      time: '9:00 AM',
+      location: 'New York',
+      price: '$199',
+      image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400',
+      category: 'Technology'
+    },
+    {
+      id: 3,
+      title: 'Music Festival',
+      date: 'May 10, 2024',
+      time: '6:00 PM',
+      location: 'Los Angeles',
+      price: '$89',
+      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400',
+      category: 'Music'
+    }
+  ])
+
+  const [activeTab, setActiveTab] = useState('All Events')
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const tabs = ['All Events', 'Design', 'Technology', 'Music']
+
+  const filteredEvents = events.filter(event => {
+    const matchesTab = activeTab === 'All Events' || event.category === activeTab
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesTab && matchesSearch
+  })
+
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <AppRoutes />
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
-  );
+    <div className="app">
+      <nav className="navbar">
+        <div className="nav-brand">EventHub</div>
+        <div className="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Events</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+        <button className="profile-btn">Profile</button>
+      </nav>
+
+      <div className="hero">
+        <h1>Discover Amazing Events</h1>
+        <p>Find and join events that match your interests</p>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search events..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button>Search</button>
+        </div>
+      </div>
+
+      <div className="tabs">
+        {tabs.map(tab => (
+          <button
+            key={tab}
+            className={`tab ${activeTab === tab ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className="events-grid">
+        {filteredEvents.map(event => (
+          <div key={event.id} className="event-card">
+            <img src={event.image} alt={event.title} />
+            <div className="event-info">
+              <span className="category">{event.category}</span>
+              <h3>{event.title}</h3>
+              <div className="event-details">
+                <p>📅 {event.date}</p>
+                <p>🕐 {event.time}</p>
+                <p>📍 {event.location}</p>
+              </div>
+              <div className="event-footer">
+                <span className="price">{event.price}</span>
+                <button className="join-btn">Join Event</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
-export default App;
+export default App
