@@ -25,7 +25,10 @@ export default function LeaderDashboard() {
     location: "",
     ticket_price: 0,
     max_attendees: "",
-    banner_url: ""
+    banner_url: "",
+    vip_price: null,
+    vvip_price: null,
+    renewal_period: "monthly"
   });
 
   useEffect(() => {
@@ -37,10 +40,32 @@ export default function LeaderDashboard() {
   }, [activeTab]);
 
   const handleSubscribe = async () => {
+    const phone = prompt('Enter your M-Pesa phone number (254XXXXXXXXX):');
+    if (!phone) return;
+    
     try {
-      const result = await subscribe();
-      alert(`Subscription activated! Your club code: ${result.club_access_code}`);
+      console.log('Leader subscription M-Pesa request...');
+      const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone_number: phone,
+          amount: 200
+        })
+      });
+      const result = await response.json();
+      console.log('Leader subscription response:', result);
+      
+      if (response.ok) {
+        alert(`Subscription payment sent to ${phone}!\nCheck your phone for M-Pesa prompt.\nCheckout ID: ${result.checkout_request_id}`);
+        // After successful payment, call the original subscribe function
+        const subscribeResult = await subscribe();
+        alert(`Subscription activated! Your club code: ${subscribeResult.club_access_code}`);
+      } else {
+        alert(`Subscription failed: ${result.error}`);
+      }
     } catch (err) {
+      console.error('Subscription error:', err);
       alert(err.message);
     }
   };
@@ -58,7 +83,10 @@ export default function LeaderDashboard() {
         location: "",
         ticket_price: 0,
         max_attendees: "",
-        banner_url: ""
+        banner_url: "",
+        vip_price: null,
+        vvip_price: null,
+        renewal_period: "monthly"
       });
     } catch (err) {
       alert(err.message);
@@ -82,6 +110,41 @@ export default function LeaderDashboard() {
       setSelectedEvent(eventId);
     } catch (err) {
       alert(err.message);
+    }
+  };
+
+  const handlePickWinners = async (eventId) => {
+    const numWinners = prompt('How many lucky winners to pick?', '2');
+    if (!numWinners || numWinners < 1) return;
+    
+    try {
+      const response = await fetch(`http://localhost:8000/api/events/${eventId}/pick-winners`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ num_winners: parseInt(numWinners) })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert(`🎉 ${result.winners.length} lucky winners selected!\n${result.winners.map(w => w.username).join(', ')}\nFree tickets sent!`);
+      } else {
+        alert(`Failed to pick winners: ${result.error}`);
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleBannerUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setNewEvent({ ...newEvent, banner_url: event.target.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -183,7 +246,12 @@ export default function LeaderDashboard() {
             {events.map((event) => (
               <div key={event.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                <div className="h-48 w-full overflow-hidden rounded-t-xl">
-                  <img src={concertImage} alt="Event Banner" className="w-full h-full object-cover"/>
+                  <img 
+                    src={event.banner_url || concertImage} 
+                    alt="Event Banner" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = concertImage; }}
+                  />
                </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
@@ -212,7 +280,10 @@ export default function LeaderDashboard() {
                     </div>
                     <div className="flex items-center text-gray-600">
                       <span className="mr-2">🎫</span>
-                      KES {event.ticket_price} • {event.tickets_sold} sold
+                      KES {event.ticket_price}
+                      {event.vip_price && <span className="ml-2 text-purple-600 font-semibold">VIP: KES {event.vip_price}</span>}
+                      {event.vvip_price && <span className="ml-2 text-gold-600 font-semibold">VVIP: KES {event.vvip_price}</span>}
+                      <span className="ml-2">• {event.tickets_sold} sold</span>
                     </div>
                   </div>
                   <div className="flex space-x-2">
@@ -221,6 +292,13 @@ export default function LeaderDashboard() {
                       className="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
                     >
                       View Tickets
+                    </button>
+                    <button
+                      onClick={() => handlePickWinners(event.id)}
+                      className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm"
+                      title="Pick lucky winners"
+                    >
+                      🎁 Winners
                     </button>
                     <button
                       onClick={() => handleDeleteEvent(event.id)}
@@ -307,25 +385,79 @@ export default function LeaderDashboard() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Ticket Price (KES)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Regular Ticket Price (KES)</label>
                   <input
                     type="number"
+                    min="0"
                     value={newEvent.ticket_price}
-                    onChange={(e) => setNewEvent({ ...newEvent, ticket_price: parseFloat(e.target.value) })}
+                    onChange={(e) => setNewEvent({ ...newEvent, ticket_price: Math.max(0, parseFloat(e.target.value) || 0) })}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">VIP Ticket Price (KES)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={newEvent.vip_price || ''}
+                    onChange={(e) => setNewEvent({ ...newEvent, vip_price: e.target.value ? Math.max(0, parseFloat(e.target.value)) : null })}
+                    placeholder="Optional"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">VVIP Ticket Price (KES)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={newEvent.vvip_price || ''}
+                    onChange={(e) => setNewEvent({ ...newEvent, vvip_price: e.target.value ? Math.max(0, parseFloat(e.target.value)) : null })}
+                    placeholder="Optional"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Max Attendees</label>
                   <input
                     type="number"
+                    min="1"
                     value={newEvent.max_attendees}
                     onChange={(e) => setNewEvent({ ...newEvent, max_attendees: e.target.value })}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Club Renewal Period</label>
+                  <select
+                    value={newEvent.renewal_period || 'monthly'}
+                    onChange={(e) => setNewEvent({ ...newEvent, renewal_period: e.target.value })}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Event Poster/Banner</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBannerUpload}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">📸 Upload an image from your device (JPG, PNG, etc.)</p>
+                {newEvent.banner_url && (
+                  <div className="mt-2">
+                    <img src={newEvent.banner_url} alt="Preview" className="w-32 h-20 object-cover rounded" />
+                  </div>
+                )}
               </div>
               <div className="flex space-x-4 pt-4">
                 <button

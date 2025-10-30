@@ -168,16 +168,18 @@ const handleGoogleLogin = async () => {
             </button>
           </div>
 
-          <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
-            New around here?{" "}
-            <button
-              onClick={() => navigate("/signup")}
-              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold hover:underline"
-            >
-              Join the fun!
-            </button>
+          <div className="text-center mt-6 text-gray-600 dark:text-gray-400">
+            <p>
+              New around here?{" "}
+              <button
+                onClick={() => navigate("/signup")}
+                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold hover:underline"
+              >
+                Join the fun!
+              </button>
+            </p>
             <p><button onClick={()=>navigate("/welcome")}>Go home</button></p>
-          </p>
+          </div>
         </div>
       </div>
     </div>

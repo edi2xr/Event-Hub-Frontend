@@ -12,6 +12,8 @@ import AdminDashboard from "./pages/Admin";
 import LeaderDashboard from "./pages/Leader";
 import UserDashboard from "./pages/User";
 import Welcome from "./pages/Welcome";
+import EventHub from "./components/EventHub";
+import TestMpesa from "./pages/TestMpesa";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -97,6 +99,19 @@ function AppRoutes() {
           )
         }
       />
+      <Route
+        path="/eventhub"
+        element={
+          user ? (
+            <EventProvider>
+              <EventHub />
+            </EventProvider>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route path="/test-mpesa" element={<TestMpesa />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

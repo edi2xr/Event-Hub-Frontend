@@ -13,12 +13,24 @@ export const EventProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await eventService.getAllEvents(page, perPage, status);
-      setEvents(data.events);
-      return data;
+      
+      // Always try authenticated endpoint first (uses cookies)
+      try {
+        const data = await eventService.getAllEvents(page, perPage, status);
+        setEvents(data.events || []);
+        return data;
+      } catch (authErr) {
+        console.log('Auth failed, trying public endpoint:', authErr);
+        // Fall back to public endpoint for regular users
+        const response = await fetch('http://localhost:8000/api/events/public');
+        const data = await response.json();
+        setEvents(data.events || []);
+        return data;
+      }
     } catch (err) {
+      console.error('Failed to load events:', err);
       setError(err.message);
-      throw err;
+      setEvents([]);
     } finally {
       setLoading(false);
     }
