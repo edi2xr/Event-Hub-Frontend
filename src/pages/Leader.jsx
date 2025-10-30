@@ -45,7 +45,7 @@ export default function LeaderDashboard() {
     
     try {
       console.log('Leader subscription M-Pesa request...');
-      const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+      const response = await fetch('https://event-hub-backend-2.onrender.com/api/payments/test-mpesa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -118,7 +118,7 @@ export default function LeaderDashboard() {
     if (!numWinners || numWinners < 1) return;
     
     try {
-      const response = await fetch(`http://localhost:8000/api/events/${eventId}/pick-winners`, {
+      const response = await fetch(`https://event-hub-backend-2.onrender.com/api/events/${eventId}/pick-winners`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

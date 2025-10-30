@@ -1,4 +1,4 @@
-const URL = "http://192.168.0.112:5000/api/auth";
+const URL = "https://event-hub-backend-2.onrender.com/api/auth";
 
 
 export async function loginUser(credentials) {

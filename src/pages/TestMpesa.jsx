@@ -6,7 +6,7 @@ export default function TestMpesa() {
 
   const testMpesa = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/payments/test-mpesa', {
+      const response = await fetch('https://event-hub-backend-2.onrender.com/api/payments/test-mpesa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone_number: phone, amount: 5 })
