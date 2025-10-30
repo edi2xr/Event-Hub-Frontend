@@ -22,9 +22,12 @@ export default function Login() {
     setError("");
 
     try {
-      await login(credentials);
+      console.log('Attempting login with:', credentials);
+      const result = await login(credentials);
+      console.log('Login successful:', result);
       navigate("/");
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.message);
     } finally {
       setIsLoading(false);

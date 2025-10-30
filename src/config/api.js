@@ -1,28 +1,28 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE_URL = 'http://localhost:8000/api';
 
 export const API_ENDPOINTS = {
   auth: {
-    signup: `${API_BASE_URL}/api/auth/signup`,
-    login: `${API_BASE_URL}/api/auth/login`,
-    logout: `${API_BASE_URL}/api/auth/logout`,
-    refresh: `${API_BASE_URL}/api/auth/refresh`,
-    profile: `${API_BASE_URL}/api/auth/profile`,
-    subscribe: `${API_BASE_URL}/api/auth/subscribe`,
-    clubMembers: `${API_BASE_URL}/api/auth/club-members`,
-    users: `${API_BASE_URL}/api/auth/users`,
-    toggleStatus: (userId) => `${API_BASE_URL}/api/auth/users/${userId}/toggle-status`,
-    googleAuth: `${API_BASE_URL}/api/auth/google-auth`,
+    signup: `${API_BASE_URL}/auth/signup`,
+    login: `${API_BASE_URL}/auth/login`,
+    logout: `${API_BASE_URL}/auth/logout`,
+    refresh: `${API_BASE_URL}/auth/refresh`,
+    profile: `${API_BASE_URL}/auth/profile`,
+    subscribe: `${API_BASE_URL}/auth/subscribe`,
+    clubMembers: `${API_BASE_URL}/auth/club-members`,
+    users: `${API_BASE_URL}/auth/users`,
+    toggleStatus: (userId) => `${API_BASE_URL}/auth/users/${userId}/toggle-status`,
+    googleAuth: `${API_BASE_URL}/auth/google-auth`,
   },
   events: {
-    base: `${API_BASE_URL}/api/events`,
-    create: `${API_BASE_URL}/api/events/create`,
-    all: `${API_BASE_URL}/api/events/all`,
-    single: (eventId) => `${API_BASE_URL}/api/events/${eventId}`,
-    approve: (eventId) => `${API_BASE_URL}/api/events/${eventId}/approve`,
-    reject: (eventId) => `${API_BASE_URL}/api/events/${eventId}/reject`,
-    purchaseTicket: (eventId) => `${API_BASE_URL}/api/events/${eventId}/purchase-ticket`,
-    myTickets: `${API_BASE_URL}/api/events/my-tickets`,
-    eventTickets: (eventId) => `${API_BASE_URL}/api/events/${eventId}/tickets`,
+    base: `${API_BASE_URL}/events`,
+    create: `${API_BASE_URL}/events/create`,
+    all: `${API_BASE_URL}/events/all`,
+    single: (eventId) => `${API_BASE_URL}/events/${eventId}`,
+    approve: (eventId) => `${API_BASE_URL}/events/${eventId}/approve`,
+    reject: (eventId) => `${API_BASE_URL}/events/${eventId}/reject`,
+    purchaseTicket: (eventId) => `${API_BASE_URL}/events/${eventId}/purchase-ticket`,
+    myTickets: `${API_BASE_URL}/events/my-tickets`,
+    eventTickets: (eventId) => `${API_BASE_URL}/events/${eventId}/tickets`,
   }
 };
 
