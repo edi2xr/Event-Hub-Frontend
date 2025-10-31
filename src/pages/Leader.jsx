@@ -42,15 +42,16 @@ export default function LeaderDashboard() {
   const handleSubscribe = async () => {
     const phone = prompt('Enter your M-Pesa phone number (254XXXXXXXXX):');
     if (!phone) return;
+    const newPhone=+phone
     
     try {
       console.log('Leader subscription M-Pesa request...');
-      const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/test-mpesa', {
+      const response = await fetch('https://event-hub-backend-3.onrender.com/api/payments/test-mpesa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone_number: phone,
-          amount: 200
+          phone_number: `254${newPhone}`,
+          amount: 1
         })
       });
       const result = await response.json();
@@ -118,7 +119,7 @@ export default function LeaderDashboard() {
     if (!numWinners || numWinners < 1) return;
     
     try {
-      const response = await fetch(`https://cationic-nonhabitually-joella.ngrok-free.dev/api/events/${eventId}/pick-winners`, {
+      const response = await fetch(`https://event-hub-backend-3.onrender.com/api/events/${eventId}/pick-winners`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

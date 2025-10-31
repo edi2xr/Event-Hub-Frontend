@@ -5,11 +5,12 @@ export default function TestMpesa() {
   const [result, setResult] = useState('')
 
   const testMpesa = async () => {
+    const newPhone=+phone
     try {
-      const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/test-mpesa', {
+      const response = await fetch('https://event-hub-backend-3.onrender.com/api/payments/test-mpesa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone, amount: 5 })
+        body: JSON.stringify({ phone_number: `254${newPhone}`, amount: 5 })
       })
       const data = await response.json()
       setResult(JSON.stringify(data, null, 2))
@@ -28,6 +29,7 @@ export default function TestMpesa() {
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6">
         <h1 className="text-2xl font-bold mb-4">M-Pesa Test</h1>
         <input
+          inputMode='numeric'
           type="text"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}

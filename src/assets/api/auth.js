@@ -1,12 +1,13 @@
-const URL = "https://cationic-nonhabitually-joella.ngrok-free.dev/api/auth";
+const URL = "https://event-hub-backend-3.onrender.com/api/auth";
 
 
 export async function loginUser(credentials) {
   const response = await fetch(`${URL}/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json"},
     body: JSON.stringify(credentials),
-    credentials: "include",
+    credentials:'include',
+    mode: 'cors'
   });
 
   const data = await response.json();

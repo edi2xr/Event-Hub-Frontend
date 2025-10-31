@@ -8,7 +8,7 @@ function EventHub() {
 
   useEffect(() => {
     // Load public events directly
-    fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/events/public')
+    fetch('https://event-hub-backend-3.onrender.com/events/public')
       .then(res => res.json())
       .then(data => {
         console.log('Public events loaded:', data)
@@ -23,7 +23,7 @@ function EventHub() {
     if (phone) {
       try {
         console.log('Making M-Pesa request...')
-        const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/test-mpesa', {
+        const response = await fetch('https://event-hub-backend-3.onrender.com/api/payments/test-mpesa', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -66,7 +66,7 @@ function EventHub() {
     if (phone) {
       try {
         console.log('Making subscription M-Pesa request...')
-        const response = await fetch('https://cationic-nonhabitually-joella.ngrok-free.dev/api/payments/test-mpesa', {
+        const response = await fetch('https://event-hub-backend-3.onrender.com/api/payments/test-mpesa', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

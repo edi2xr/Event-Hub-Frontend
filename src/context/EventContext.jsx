@@ -22,7 +22,7 @@ export const EventProvider = ({ children }) => {
       } catch (authErr) {
         console.log('Auth failed, trying public endpoint:', authErr);
         // Fall back to public endpoint for regular users
-        const response = await fetch('https://event-hub-backend-2.onrender.com/api/events/public');
+        const response = await fetch('https://event-hub-backend-3.onrender.com/api/events/public');
         const data = await response.json();
         setEvents(data.events || []);
         return data;
